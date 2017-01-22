@@ -6,6 +6,18 @@ import java.awt.event.*;
 
 public class Fenetre extends JFrame {
 	
+	//declaration de notre panneau principal
+	private JPanel premierPanel = new JPanel(new BorderLayout());
+		
+	//declaration d'un carde layout pour gerer nos defferents panneaux
+	private CardLayout card = new CardLayout();
+	
+	//declartion des de l'objet panneau de notre application
+	private Panneau pan = new Panneau();
+	
+	//declaration de la variable qui va gerer le livre des requetes
+	RequestBook livre = new RequestBook();
+	
 	//declaration des variables pour notre menu
 	private String[] nomItem1 = {"Nouveau projet","Ouvrir un projet","anregistrer","anregistrer sou...","importer un projet","proprieter","Sortir"};
 	private String[] nomItem2 = {"undo","reundo","rechercher","copie","coller","effacer","remplacer"};
@@ -22,16 +34,17 @@ public class Fenetre extends JFrame {
 	private String[] nomList = {"Nouveau","Enregistrer","Rechercher","Editer","Supprimer"};
 	private JButton[] bouton = new JButton[nomList.length];
 	
-	private Panneau pano = new Panneau();
+
 	
 	 
 	
 	public Fenetre()
 	{
+		premierPanel.setBackground(Color.white);
 		
 		this.setTitle("Gestion des visiteurs");
 		
-		this.setSize(850,600);
+		this.setSize(1000,600);
 		
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
@@ -42,7 +55,7 @@ public class Fenetre extends JFrame {
 		//methode pour l;initialisation de nos composant
 		initComp();
 		
-		this.getContentPane().add(pano);
+		this.getContentPane().add(premierPanel);
 						
 		this.setVisible(true);
 		
@@ -82,11 +95,32 @@ public class Fenetre extends JFrame {
 				
 			//ajou de l'ement dans notre objet
 			footer(apropos,nomItem5,item4);
-					
-		
-		
-		
-		
+			
+			JPanel panier = pan.enregistreVisiteur();
+			panier.setBackground(Color.white);
+
+			/*for(int i = 0; i < nomList.length; i++)
+			{
+				bouton[i] = new JButton(nomList[i]);
+				panier.add(bouton[i]);
+				
+			}*/
+			panier.setBorder(BorderFactory.createLineBorder(Color.black));			
+			premierPanel.add(panier);
+			
+			
+			/*
+			 * partie reserver pour mettre les composant dans le cardLAyout
+			 * por pouvoir les afficher sans auun prbleme 
+			 * 
+			 */
+			
+			evenment(item[1], premierPanel, nomItem1[1]);
+			
+				
+		/*
+		 * Ajout ddes composant du menu dans le menu bar et initialisation du menu bar
+		*/
 			menu.add(ficher);
 					
 			menu.add(editer);
@@ -99,20 +133,18 @@ public class Fenetre extends JFrame {
 					
 			this.setJMenuBar(menu);
 					
-			item[0].addActionListener(new projetListener());
+		
 					
 			item[6].addActionListener(new ActionListener(){
 				public void actionPerformed(ActionEvent e){
 						System.exit(0);
 					}
-				});
-					
-			item1[2].addActionListener(new RechercheListener());
-				
+				});				
 		
 			}
+
 	
-			void footer(JMenu menu, String[] nom, JMenuItem[] menuIt)
+	void footer(JMenu menu, String[] nom, JMenuItem[] menuIt)
 			{
 				for(int i = 0; i < nom.length; i++)
 				{
@@ -128,15 +160,21 @@ public class Fenetre extends JFrame {
 				
 			}
 			
-			/*/boucle pour former les bouttons 
-			for(int i = 0; i < nomList.length; i++)
+			public void evenment(JMenuItem item, final JPanel pa, final String nom)
 			{
 				
-				bouton[i] = new JButton(nomList[i]);
+				item.addActionListener(new ActionListener(){
+					public void actionPerformed(ActionEvent e){
+							
+						card.show(pa, nom);
+							
+						}
+					});
 				
 				
-			}*/			
+			}
 			
+
 			//la classe intern pour lancer le projet
 			class projetListener implements ActionListener{
 				public void actionPerformed(ActionEvent e){
@@ -150,6 +188,8 @@ public class Fenetre extends JFrame {
 					
 				}
 			}
+			
+		
 
 			
 }
